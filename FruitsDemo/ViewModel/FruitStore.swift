@@ -1,4 +1,5 @@
 import Foundation
+
 class FruitStore:ObservableObject{
     
     @Published var fruits = loadFruits()

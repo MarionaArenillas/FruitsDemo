@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct AddFruitView: View {
+    //@EnvironmentObject var fruitStore:FruitStore
     
     @Binding var newFruit:Fruit
     
