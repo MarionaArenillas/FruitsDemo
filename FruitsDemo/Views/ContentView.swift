@@ -1,3 +1,4 @@
+//The compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
 
 import SwiftUI
 
@@ -55,10 +56,12 @@ struct ContentView: View {
                         }
                 }
             }
-            .alert("Error", isPresented: $showingAlert) {
-                Button("OK", role: .cancel) { }
-            } message: {
-                Text(alertMessage)
+            .alert(isPresented: $showingAlert) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text(alertMessage),
+                    dismissButton: .cancel(Text("OK"))
+                )
             }
         }
     }
