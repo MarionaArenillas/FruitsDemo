@@ -4,8 +4,11 @@ import SwiftUI
 //TODO: Create a list
 //TODO: Create the navigation
 struct ContentView: View {
-    @EnvironmentObject private var store:FruitStore
+    @EnvironmentObject private var store: FruitStore
     @State private var newFruit = FruitStore.defaultFruit
+    @State private var showingAddFruit = false
+    @State private var showingAlert = false
+    @State private var alertMessage = ""
     
     var body: some View {
         NavigationView{
