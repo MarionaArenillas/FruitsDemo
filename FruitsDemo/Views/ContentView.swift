@@ -2,7 +2,8 @@
 import SwiftUI
 
 //TODO: Create a list
-//TODO: Create the navigation
+//TODO: Create the navigation  
+
 struct ContentView: View {
     @EnvironmentObject private var store: FruitStore
     @State private var newFruit = FruitStore.defaultFruit
@@ -11,15 +12,53 @@ struct ContentView: View {
     @State private var alertMessage = ""
     
     var body: some View {
-        NavigationView{
+        NavigationView {
             List {
-                ForEach(store.fruits) {
-                    fruit in NavigationLink(destination: DetailFruitView(fruit: fruit)) {
+                ForEach(store.fruits) { fruit in
+                    NavigationLink(destination: DetailFruitView(fruit: fruit)) {
                         FruitRowView(fruit: fruit)
                     }
                 }
                 .onDelete(perform: deleteFruit)
-
+            }
+            .navigationTitle("Fruits")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        newFruit = FruitStore.defaultFruit
+                        showingAddFruit = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    EditButton()
+                }
+            }
+            .sheet(isPresented: $showingAddFruit) {
+                NavigationView {
+                    AddFruitView(newFruit: $newFruit)
+                        .navigationTitle("Add Fruit")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button("Cancel") {
+                                    showingAddFruit = false
+                                }
+                            }
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Save") {
+                                    saveFruit()
+                                }
+                                .disabled(newFruit.name.trimmingCharacters(in: .whitespaces).isEmpty)
+                            }
+                        }
+                }
+            }
+            .alert("Error", isPresented: $showingAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(alertMessage)
             }
         }
     }
@@ -27,7 +66,7 @@ struct ContentView: View {
     private func deleteFruit(at offsets: IndexSet) {
         store.fruits.remove(atOffsets: offsets)
     }
-
+    
     private func saveFruit() {
         // Validar que el nombre no esté vacío
         let trimmedName = newFruit.name.trimmingCharacters(in: .whitespaces)
@@ -37,7 +76,7 @@ struct ContentView: View {
             return
         }
         
-        // Validar que no exista una fruta con el mismo nombre (evitar duplicados)
+        // Validar que no exista una fruta con el mismo nombre 
         let nameExists = store.fruits.contains { fruit in
             fruit.name.lowercased() == trimmedName.lowercased()
         }
@@ -56,7 +95,6 @@ struct ContentView: View {
             showingAddFruit = false
         }
     }
-    
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -64,6 +102,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView().environmentObject(FruitStore())
     }
 }
-
-
-
