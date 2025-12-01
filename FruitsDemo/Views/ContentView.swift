@@ -36,6 +36,26 @@ struct ContentView: View {
             showingAlert = true
             return
         }
+        
+        // Validar que no exista una fruta con el mismo nombre (evitar duplicados)
+        let nameExists = store.fruits.contains { fruit in
+            fruit.name.lowercased() == trimmedName.lowercased()
+        }
+        
+        if nameExists {
+            alertMessage = "A fruit with the name '\(trimmedName)' already exists"
+            showingAlert = true
+        } else {
+            // Crear una nueva fruta con el nombre limpio
+            let fruitToAdd = Fruit(
+                name: trimmedName,
+                emoji: newFruit.emoji,
+                description: newFruit.description
+            )
+            store.fruits.append(fruitToAdd)
+            showingAddFruit = false
+        }
+    }
     
 }
 
