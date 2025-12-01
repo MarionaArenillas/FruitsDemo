@@ -27,6 +27,16 @@ struct ContentView: View {
     private func deleteFruit(at offsets: IndexSet) {
         store.fruits.remove(atOffsets: offsets)
     }
+
+    private func saveFruit() {
+        // Validar que el nombre no esté vacío
+        let trimmedName = newFruit.name.trimmingCharacters(in: .whitespaces)
+        guard !trimmedName.isEmpty else {
+            alertMessage = "The fruit must have a name"
+            showingAlert = true
+            return
+        }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
