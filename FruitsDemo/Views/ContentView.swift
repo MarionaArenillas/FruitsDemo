@@ -1,5 +1,3 @@
-//The compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
-
 import SwiftUI
 
 //TODO: Create a list
@@ -55,13 +53,13 @@ struct ContentView: View {
                             }
                         }
                 }
-            }
-            .alert(isPresented: $showingAlert) {
-                Alert(
-                    title: Text("Error"),
-                    message: Text(alertMessage),
-                    dismissButton: .cancel(Text("OK"))
-                )
+                .alert(isPresented: $showingAlert) {
+                    Alert(
+                        title: Text("Error"),
+                        message: Text(alertMessage),
+                        dismissButton: .cancel(Text("OK"))
+                    )
+                }
             }
         }
     }
@@ -73,6 +71,8 @@ struct ContentView: View {
     private func saveFruit() {
         // Validar que el nombre no esté vacío
         let trimmedName = newFruit.name.trimmingCharacters(in: .whitespaces)
+        
+        // Nom buit
         guard !trimmedName.isEmpty else {
             alertMessage = "The fruit must have a name"
             showingAlert = true
@@ -87,16 +87,17 @@ struct ContentView: View {
         if nameExists {
             alertMessage = "A fruit with the name '\(trimmedName)' already exists"
             showingAlert = true
-        } else {
-            // Crear una nueva fruta con el nombre limpio
-            let fruitToAdd = Fruit(
-                name: trimmedName,
-                emoji: newFruit.emoji,
-                description: newFruit.description
-            )
-            store.fruits.append(fruitToAdd)
-            showingAddFruit = false
+            return
         }
+            
+        // Si tot està correcte afegim nova fruita
+        let fruitToAdd = Fruit(
+            name: trimmedName,
+            emoji: newFruit.emoji,
+            description: newFruit.description
+        )
+        store.fruits.append(fruitToAdd)
+        showingAddFruit = false
     }
 }
 
